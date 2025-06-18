@@ -33,4 +33,6 @@ public class ClientController {
     public ClientResponseDTO getClientById(@PathVariable Long id) {
         return clientService.findClientById(id);
     }
+
+    public
 }
