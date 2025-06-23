@@ -4,10 +4,14 @@ import com.crudapi.crud.dto.order.CreateOrderDTO;
 import com.crudapi.crud.dto.order.OrderFilterDTO;
 import com.crudapi.crud.dto.order.OrderResponseDTO;
 import com.crudapi.crud.dto.order.UpdateOrderDTO;
+import com.crudapi.crud.dto.product.ProductResponseDTO;
 import com.crudapi.crud.enums.OrderSortField;
 import com.crudapi.crud.enums.SortDirection;
 import com.crudapi.crud.mapper.OrderFilterMapper;
+import com.crudapi.crud.model.Order;
+import com.crudapi.crud.repository.OrderRepository;
 import com.crudapi.crud.service.OrderService;
+import com.crudapi.crud.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +25,23 @@ public class OrderController {
 
     private final OrderService orderService;
     private final OrderFilterMapper orderFilterMapper;
+    private final OrderRepository orderRepository;
+    private final ProductService productService;
+
+
+    @PostMapping("/add-product")
+    public ResponseEntity<ProductResponseDTO> addProductToOrder(
+            @RequestParam Long orderId,
+            @RequestParam Long productId
+    ) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        ProductResponseDTO dto = productService.addProductToOrder(order, productId);
+        orderRepository.save(order);
+
+        return ResponseEntity.ok(dto);
+    }
 
     @PostMapping("/orders")
     public OrderResponseDTO createOrder(@RequestBody CreateOrderDTO dto) {

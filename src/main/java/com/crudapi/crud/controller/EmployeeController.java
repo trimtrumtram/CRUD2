@@ -44,7 +44,7 @@ public class EmployeeController {
             @RequestParam(required = false) String emailFilter,
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
-            @RequestParam(defaultValue = "lastName") EmployeeSortField sortBy,
+            @RequestParam(defaultValue = "LASTNAME") EmployeeSortField sortBy,
             @RequestParam(defaultValue = "ASC") SortDirection sortDirection)
     {
         EmployeeFilterDTO filter = employeeFilterMapper.toDTO(

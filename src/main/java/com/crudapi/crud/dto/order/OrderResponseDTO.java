@@ -1,6 +1,5 @@
 package com.crudapi.crud.dto.order;
 
-import com.crudapi.crud.dto.client.ClientResponseDTO;
 import com.crudapi.crud.enums.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,5 +15,6 @@ public class OrderResponseDTO {
     private Long id;
     private LocalDateTime creationDateTime;
     private OrderStatus status;
-    private ClientResponseDTO client;
+    private Long idClient;
+    private String clientName;
 }

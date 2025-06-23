@@ -7,6 +7,7 @@ import com.crudapi.crud.dto.product.UpdateProductDTO;
 import com.crudapi.crud.enums.ProductSortField;
 import com.crudapi.crud.enums.SortDirection;
 import com.crudapi.crud.mapper.ProductMapper;
+import com.crudapi.crud.model.Order;
 import com.crudapi.crud.model.Product;
 import com.crudapi.crud.repository.ProductRepository;
 import com.crudapi.crud.specification.ProductSpecification;
@@ -25,6 +26,14 @@ public class ProductService {
     public ProductService(ProductRepository productRepository, ProductMapper productMapper) {
         this.productRepository = productRepository;
         this.productMapper = productMapper;
+    }
+
+    public ProductResponseDTO addProductToOrder(Order order, long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        order.getProducts().add(product);
+        return productMapper.mapToDTO(productRepository.save(product));
     }
 
     public ProductResponseDTO createProduct(CreateProductDTO dto) {
