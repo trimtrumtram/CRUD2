@@ -29,7 +29,7 @@ public class OrderController {
     private final ProductService productService;
 
 
-    @PostMapping("/add-product")
+    @PostMapping("/product")
     public ResponseEntity<ProductResponseDTO> addProductToOrder(
             @RequestParam Long orderId,
             @RequestParam Long productId
