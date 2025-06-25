@@ -16,5 +16,5 @@ public class OrderResponseDTO {
     private LocalDateTime creationDateTime;
     private OrderStatus status;
     private Long idClient;
-    private String clientName;
+    private String clientLastName;
 }
