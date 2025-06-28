@@ -1,7 +1,7 @@
 package com.crudapi.crud.dto.product;
 
-import com.crudapi.crud.enums.ProductSortField;
-import com.crudapi.crud.enums.SortDirection;
+import com.crudapi.crud.enums.sort.ProductSortField;
+import com.crudapi.crud.enums.sort.SortDirection;
 import lombok.Data;
 
 import java.math.BigDecimal;

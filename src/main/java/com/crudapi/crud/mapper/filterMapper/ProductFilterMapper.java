@@ -1,8 +1,8 @@
-package com.crudapi.crud.mapper;
+package com.crudapi.crud.mapper.filterMapper;
 
 import com.crudapi.crud.dto.product.ProductFilterDTO;
-import com.crudapi.crud.enums.ProductSortField;
-import com.crudapi.crud.enums.SortDirection;
+import com.crudapi.crud.enums.sort.ProductSortField;
+import com.crudapi.crud.enums.sort.SortDirection;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

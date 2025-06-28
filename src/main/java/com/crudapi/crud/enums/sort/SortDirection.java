@@ -1,4 +1,4 @@
-package com.crudapi.crud.enums;
+package com.crudapi.crud.enums.sort;
 
 public enum SortDirection {
 

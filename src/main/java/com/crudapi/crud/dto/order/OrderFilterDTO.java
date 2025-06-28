@@ -1,8 +1,8 @@
 package com.crudapi.crud.dto.order;
 
-import com.crudapi.crud.enums.OrderSortField;
-import com.crudapi.crud.enums.OrderStatus;
-import com.crudapi.crud.enums.SortDirection;
+import com.crudapi.crud.enums.sort.OrderSortField;
+import com.crudapi.crud.enums.entityEnums.OrderStatus;
+import com.crudapi.crud.enums.sort.SortDirection;
 import lombok.Data;
 
 import java.time.LocalDateTime;

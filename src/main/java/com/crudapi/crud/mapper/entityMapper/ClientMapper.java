@@ -1,4 +1,4 @@
-package com.crudapi.crud.mapper;
+package com.crudapi.crud.mapper.entityMapper;
 
 import com.crudapi.crud.dto.client.ClientResponseDTO;
 import com.crudapi.crud.dto.client.CreateClientDTO;

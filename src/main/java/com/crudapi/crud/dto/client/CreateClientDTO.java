@@ -1,6 +1,6 @@
 package com.crudapi.crud.dto.client;
 
-import com.crudapi.crud.model.Order;
+import com.crudapi.crud.dto.order.OrderResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,5 +26,5 @@ public class CreateClientDTO {
     @NotBlank(message = "Phone number is required")
     private String phone;
 
-    private List<Order> orders;
+    private List<OrderResponseDTO> orders;
 }

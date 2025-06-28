@@ -5,9 +5,9 @@ import com.crudapi.crud.dto.order.OrderFilterDTO;
 import com.crudapi.crud.dto.order.OrderResponseDTO;
 import com.crudapi.crud.dto.order.UpdateOrderDTO;
 import com.crudapi.crud.dto.product.ProductResponseDTO;
-import com.crudapi.crud.enums.OrderSortField;
-import com.crudapi.crud.enums.SortDirection;
-import com.crudapi.crud.mapper.OrderFilterMapper;
+import com.crudapi.crud.enums.sort.OrderSortField;
+import com.crudapi.crud.enums.sort.SortDirection;
+import com.crudapi.crud.mapper.filterMapper.OrderFilterMapper;
 import com.crudapi.crud.model.Order;
 import com.crudapi.crud.repository.OrderRepository;
 import com.crudapi.crud.service.OrderService;
@@ -29,10 +29,10 @@ public class OrderController {
     private final ProductService productService;
 
 
-    @PostMapping("/product")
+    @PostMapping("/orders/{orderId}/products/{productId}")
     public ResponseEntity<ProductResponseDTO> addProductToOrder(
-            @RequestParam Long orderId,
-            @RequestParam Long productId
+            @PathVariable Long orderId,
+            @PathVariable Long productId
     ) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));

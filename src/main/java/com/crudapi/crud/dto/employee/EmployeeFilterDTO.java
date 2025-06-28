@@ -1,8 +1,8 @@
 package com.crudapi.crud.dto.employee;
 
-import com.crudapi.crud.enums.SortDirection;
-import com.crudapi.crud.enums.EmployeeSortField;
-import com.crudapi.crud.enums.Role;
+import com.crudapi.crud.enums.sort.SortDirection;
+import com.crudapi.crud.enums.sort.EmployeeSortField;
+import com.crudapi.crud.enums.entityEnums.Role;
 import lombok.Data;
 
 @Data

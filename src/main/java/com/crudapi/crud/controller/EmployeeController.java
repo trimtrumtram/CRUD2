@@ -1,12 +1,12 @@
 package com.crudapi.crud.controller;
 
-import com.crudapi.crud.enums.SortDirection;
-import com.crudapi.crud.enums.EmployeeSortField;
+import com.crudapi.crud.enums.sort.SortDirection;
+import com.crudapi.crud.enums.sort.EmployeeSortField;
 import com.crudapi.crud.dto.employee.CreateEmployeeDTO;
 import com.crudapi.crud.dto.employee.EmployeeFilterDTO;
 import com.crudapi.crud.dto.employee.EmployeeResponseDTO;
 import com.crudapi.crud.dto.employee.UpdateEmployeeDTO;
-import com.crudapi.crud.mapper.EmployeeFilterMapper;
+import com.crudapi.crud.mapper.filterMapper.EmployeeFilterMapper;
 import com.crudapi.crud.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

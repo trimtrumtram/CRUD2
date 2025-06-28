@@ -1,6 +1,6 @@
 package com.crudapi.crud.dto.employee;
 
-import com.crudapi.crud.enums.Role;
+import com.crudapi.crud.enums.entityEnums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,7 +1,7 @@
-package com.crudapi.crud.mapper;
+package com.crudapi.crud.mapper.filterMapper;
 
-import com.crudapi.crud.enums.SortDirection;
-import com.crudapi.crud.enums.EmployeeSortField;
+import com.crudapi.crud.enums.sort.SortDirection;
+import com.crudapi.crud.enums.sort.EmployeeSortField;
 import com.crudapi.crud.dto.employee.EmployeeFilterDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

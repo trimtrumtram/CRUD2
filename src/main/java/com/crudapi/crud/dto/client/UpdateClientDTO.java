@@ -1,6 +1,6 @@
 package com.crudapi.crud.dto.client;
 
-import com.crudapi.crud.model.Order;
+import com.crudapi.crud.dto.order.OrderResponseDTO;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
@@ -24,5 +24,5 @@ public class UpdateClientDTO  {
     @NotBlank(message = "Phone number is required")
     private String phone;
 
-    private List<Order> orders;
+    private List<OrderResponseDTO> orders;
 }

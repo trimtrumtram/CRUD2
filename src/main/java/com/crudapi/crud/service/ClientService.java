@@ -3,7 +3,7 @@ package com.crudapi.crud.service;
 import com.crudapi.crud.dto.client.ClientResponseDTO;
 import com.crudapi.crud.dto.client.CreateClientDTO;
 import com.crudapi.crud.dto.client.UpdateClientDTO;
-import com.crudapi.crud.mapper.ClientMapper;
+import com.crudapi.crud.mapper.entityMapper.ClientMapper;
 import com.crudapi.crud.model.Client;
 import com.crudapi.crud.repository.ClientRepository;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package com.crudapi.crud.specification;
 
-import com.crudapi.crud.enums.OrderStatus;
+import com.crudapi.crud.enums.entityEnums.OrderStatus;
 import com.crudapi.crud.model.Order;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
@@ -23,7 +23,7 @@ public class OrderSpecification {
             }
 
             if(status != null) {
-                predicates.add(criteriaBuilder.equal(root.get("status"), status));
+                predicates.add(criteriaBuilder.equal(root.get("status"), status.getRussianDescription()));
             }
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         });

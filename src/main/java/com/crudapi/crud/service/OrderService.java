@@ -4,9 +4,9 @@ import com.crudapi.crud.dto.order.CreateOrderDTO;
 import com.crudapi.crud.dto.order.OrderFilterDTO;
 import com.crudapi.crud.dto.order.OrderResponseDTO;
 import com.crudapi.crud.dto.order.UpdateOrderDTO;
-import com.crudapi.crud.enums.OrderSortField;
-import com.crudapi.crud.enums.SortDirection;
-import com.crudapi.crud.mapper.OrderMapper;
+import com.crudapi.crud.enums.sort.OrderSortField;
+import com.crudapi.crud.enums.sort.SortDirection;
+import com.crudapi.crud.mapper.entityMapper.OrderMapper;
 import com.crudapi.crud.model.Order;
 import com.crudapi.crud.specification.OrderSpecification;
 import com.crudapi.crud.repository.OrderRepository;
@@ -32,6 +32,7 @@ public class OrderService {
     public OrderResponseDTO createOrder (CreateOrderDTO dto) {
         Order order = orderMapper.mapToEntity(dto);
         order.setCreationDateTime(LocalDateTime.now());
+
         return orderMapper.mapToDTO(orderRepository.save(order));
     }
 

@@ -1,4 +1,4 @@
-package com.crudapi.crud.mapper;
+package com.crudapi.crud.mapper.entityMapper;
 
 import com.crudapi.crud.dto.employee.CreateEmployeeDTO;
 import com.crudapi.crud.dto.employee.EmployeeResponseDTO;

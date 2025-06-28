@@ -18,13 +18,10 @@ CREATE TABLE client (
 
 CREATE TABLE orders (
                         id BIGSERIAL PRIMARY KEY,
-                        order_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                        total_amount NUMERIC(10, 2) NOT NULL,
                         client_id BIGINT NOT NULL,
 
                         CONSTRAINT fk_client
-                            FOREIGN KEY (client_id)
-                            REFERENCES client(id)
+                            FOREIGN KEY (client_id) REFERENCES client(id)
                             ON DELETE CASCADE
 );
 
