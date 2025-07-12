@@ -19,6 +19,8 @@ CREATE TABLE client (
 CREATE TABLE orders (
                         id BIGSERIAL PRIMARY KEY,
                         client_id BIGINT NOT NULL,
+                        status VARCHAR(50) NOT NULL,
+                        creation_date_time timestamp NOT NULL DEFAULT now(),
 
                         CONSTRAINT fk_client
                             FOREIGN KEY (client_id) REFERENCES client(id)

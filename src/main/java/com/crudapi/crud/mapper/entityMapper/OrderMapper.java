@@ -11,9 +11,10 @@ import org.mapstruct.Named;
 @Mapper(componentModel = "spring")
 public interface OrderMapper {
 
+    @Mapping(source = "client.id", target = "clientId")
     OrderResponseDTO mapToDTO(Order order);
-    @Mapping(source = "clientId", target = "client", qualifiedByName = "mapClient")
 
+    @Mapping(source = "clientId", target = "client", qualifiedByName = "mapClient")
     Order mapToEntity(CreateOrderDTO dto);
 
     @Named("mapClient")
