@@ -9,6 +9,7 @@ import com.crudapi.crud.enums.sort.SortDirection;
 import com.crudapi.crud.mapper.entityMapper.ProductMapper;
 import com.crudapi.crud.model.Order;
 import com.crudapi.crud.model.Product;
+import com.crudapi.crud.repository.OrderRepository;
 import com.crudapi.crud.repository.ProductRepository;
 import com.crudapi.crud.specification.ProductSpecification;
 import org.springframework.data.domain.Page;
@@ -22,17 +23,21 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+    private final OrderRepository orderRepository;
 
-    public ProductService(ProductRepository productRepository, ProductMapper productMapper) {
+    public ProductService(ProductRepository productRepository, ProductMapper productMapper, OrderRepository orderRepository) {
         this.productRepository = productRepository;
         this.productMapper = productMapper;
+        this.orderRepository = orderRepository;
     }
 
-    public ProductResponseDTO addProductToOrder(Order order, long productId) {
+    public ProductResponseDTO addProductToOrder(Long orderId, long productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
-
+        Order order = orderRepository.findById(orderId)
+                        .orElseThrow(() -> new RuntimeException("Order not found"));
         order.getProducts().add(product);
+        orderRepository.save(order);
         return productMapper.mapToDTO(productRepository.save(product));
     }
 

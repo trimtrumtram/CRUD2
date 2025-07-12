@@ -8,8 +8,6 @@ import com.crudapi.crud.dto.product.ProductResponseDTO;
 import com.crudapi.crud.enums.sort.OrderSortField;
 import com.crudapi.crud.enums.sort.SortDirection;
 import com.crudapi.crud.mapper.filterMapper.OrderFilterMapper;
-import com.crudapi.crud.model.Order;
-import com.crudapi.crud.repository.OrderRepository;
 import com.crudapi.crud.service.OrderService;
 import com.crudapi.crud.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +23,6 @@ public class OrderController {
 
     private final OrderService orderService;
     private final OrderFilterMapper orderFilterMapper;
-    private final OrderRepository orderRepository;
     private final ProductService productService;
 
 
@@ -34,12 +31,7 @@ public class OrderController {
             @PathVariable Long orderId,
             @PathVariable Long productId
     ) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
-
-        ProductResponseDTO dto = productService.addProductToOrder(order, productId);
-        orderRepository.save(order);
-
+        ProductResponseDTO dto = productService.addProductToOrder(orderId, productId);
         return ResponseEntity.ok(dto);
     }
 
