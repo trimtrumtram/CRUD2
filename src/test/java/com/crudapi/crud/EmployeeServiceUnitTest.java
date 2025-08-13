@@ -1,4 +1,4 @@
-package com.crudapi.crud.employeeTest;
+package com.crudapi.crud;
 
 import com.crudapi.crud.dto.employee.CreateEmployeeDTO;
 import com.crudapi.crud.dto.employee.EmployeeFilterDTO;
