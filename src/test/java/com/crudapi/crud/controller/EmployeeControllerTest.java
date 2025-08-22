@@ -6,15 +6,22 @@ import com.crudapi.crud.dto.employee.UpdateEmployeeDTO;
 import com.crudapi.crud.enums.entityEnums.Role;
 import com.crudapi.crud.repository.EmployeeRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.util.TestPropertyValues;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.Objects;
 
@@ -27,9 +34,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Testcontainers
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Transactional
+@ContextConfiguration(initializers = {EmployeeControllerTest.Initializer.class})
 public class EmployeeControllerTest {
+
+    @Container
+    private static final PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:15.3-alpine")
+            .withDatabaseName("test")
+            .withUsername("test")
+            .withPassword("test");
 
     @Autowired
     private MockMvc mockMvc;
@@ -42,6 +56,22 @@ public class EmployeeControllerTest {
 
     private CreateEmployeeDTO createDTO;
     private UpdateEmployeeDTO updateDTO;
+
+    @BeforeAll
+    static void startContainer() {
+        postgreSQLContainer.start();
+    }
+
+    static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+        @Override
+        public void initialize(ConfigurableApplicationContext applicationContext) {
+            TestPropertyValues.of(
+                    "spring.datasource.url=" + postgreSQLContainer.getJdbcUrl(),
+                    "spring.datasource.username=" + postgreSQLContainer.getUsername(),
+                    "spring.datasource.password=" + postgreSQLContainer.getPassword()
+            ).applyTo(applicationContext.getEnvironment());
+        }
+    }
 
     @BeforeEach
     void setUp() {
