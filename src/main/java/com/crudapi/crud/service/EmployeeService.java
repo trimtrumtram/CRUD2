@@ -41,6 +41,7 @@ public class EmployeeService {
     public EmployeeResponseDTO updateEmployee(Long id, UpdateEmployeeDTO dto) {
         Employee employee = findEmployee(id, dto);
         validateEmail(employee, dto.getEmail());
+        employeeMapper.updateEntityFromDTO(dto, employee);
         Employee updatedEmployee = employeeRepository.save(employee);
         return employeeMapper.mapToDTO(updatedEmployee);
     }
