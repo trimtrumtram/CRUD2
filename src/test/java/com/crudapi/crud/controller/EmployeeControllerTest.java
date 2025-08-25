@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Testcontainers
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Sql("/db/migration/V1_create_tables.sql")
+@Sql("/db/migration/V1__create_tables.sql")
 @Transactional
 public class EmployeeControllerTest {
 
