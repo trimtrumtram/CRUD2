@@ -1,7 +1,5 @@
 FROM maven:3.9-eclipse-temurin-21 AS builder
 
-LABEL authors="fo_yd"
-
 WORKDIR /app
 
 COPY pom.xml .
@@ -23,5 +21,5 @@ EXPOSE 8080
 
 ENV JAVA_OPTS=""
 
-ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS -jar /app/app.jar"]
+ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS -Dserver.port=$SERVER_PORT -jar /app/app.jar"]
 
