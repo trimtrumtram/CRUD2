@@ -14,12 +14,8 @@ RUN addgroup -S app && adduser -S app -G app
 USER app
 
 WORKDIR /app
-
 COPY --from=builder /app/target/*.jar /app/app.jar
 
 EXPOSE 8080
-
 ENV JAVA_OPTS=""
-
 ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS -Dserver.port=$SERVER_PORT -jar /app/app.jar"]
-
