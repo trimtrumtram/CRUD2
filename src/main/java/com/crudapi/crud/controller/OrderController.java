@@ -10,6 +10,7 @@ import com.crudapi.crud.enums.sort.SortDirection;
 import com.crudapi.crud.mapper.filterMapper.OrderFilterMapper;
 import com.crudapi.crud.service.OrderService;
 import com.crudapi.crud.service.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,7 @@ public class OrderController {
 
 
     @PostMapping("/orders/{orderId}/products/{productId}")
+    @Operation(summary = "Add product to order")
     public ResponseEntity<ProductResponseDTO> addProductToOrder(
             @PathVariable Long orderId,
             @PathVariable Long productId
@@ -36,27 +38,32 @@ public class OrderController {
     }
 
     @PostMapping("/orders")
+    @Operation(summary = "Create a new order")
     public OrderResponseDTO createOrder(@RequestBody CreateOrderDTO dto) {
         return orderService.createOrder(dto);
     }
 
     @PutMapping("/order/{id}")
+    @Operation(summary = "Update an existing order")
     public OrderResponseDTO updateOrder(@PathVariable Long id, @RequestBody UpdateOrderDTO dto) {
         return orderService.updateOrder(id, dto);
     }
 
     @DeleteMapping("/order/{id}")
+    @Operation(summary = "Delete an existing order")
     public boolean deleteOrder(@PathVariable Long id) {
         orderService.deleteOrder(id);
         return true;
     }
 
     @GetMapping("/order/{id}")
+    @Operation(summary = "Get an order by id")
     public OrderResponseDTO getOrderById(@PathVariable Long id) {
         return orderService.getOrder(id);
     }
 
     @GetMapping("/order")
+    @Operation(summary = "Get all orders")
     public ResponseEntity<Page<OrderResponseDTO>> getOrders(
             @RequestParam(required = false) LocalDateTime startDateFilter,
             @RequestParam(required = false) LocalDateTime endDateFilter,

@@ -8,6 +8,7 @@ import com.crudapi.crud.dto.employee.EmployeeResponseDTO;
 import com.crudapi.crud.dto.employee.UpdateEmployeeDTO;
 import com.crudapi.crud.mapper.filterMapper.EmployeeFilterMapper;
 import com.crudapi.crud.service.EmployeeService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -21,22 +22,26 @@ public class EmployeeController {
     private final EmployeeFilterMapper employeeFilterMapper;
 
     @PostMapping("/employee")
+    @Operation(summary = "Create a new employee")
     public EmployeeResponseDTO createEmployee(@RequestBody CreateEmployeeDTO dto) {
         return employeeService.createEmployee(dto);
     }
 
     @PutMapping("/employee/{id}")
+    @Operation(summary = "Update an existing employee")
     public EmployeeResponseDTO updateEmployee(@PathVariable Long id, @RequestBody UpdateEmployeeDTO dto) {
         return employeeService.updateEmployee(id, dto);
     }
 
     @DeleteMapping("/employee/{id}")
+    @Operation(summary = "Delete an existing employee")
     public boolean deleteEmployee(@PathVariable Long id) {
         employeeService.deleteEmployee(id);
         return true;
     }
 
     @GetMapping("/employee")
+    @Operation(summary = "Get all employees")
     public ResponseEntity<Page<EmployeeResponseDTO>> getAllEmployees(
             @RequestParam(required = false) String firstNameFilter,
             @RequestParam(required = false) String lastNameFilter,
