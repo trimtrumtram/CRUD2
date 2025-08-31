@@ -8,4 +8,4 @@ COPY target/CRUD-0.0.1-SNAPSHOT.jar app.jar
 
 EXPOSE 8080
 ENV JAVA_OPTS=""
-ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS -Dserver.port=$SERVER_PORT -jar /app/app.jar"]
+ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS -Dserver.port=$SERVER_PORT -jar app.jar"]

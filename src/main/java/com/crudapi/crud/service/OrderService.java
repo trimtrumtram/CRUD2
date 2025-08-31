@@ -10,6 +10,7 @@ import com.crudapi.crud.mapper.entityMapper.OrderMapper;
 import com.crudapi.crud.model.Order;
 import com.crudapi.crud.specification.OrderSpecification;
 import com.crudapi.crud.repository.OrderRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+@Slf4j
 @Service
 public class OrderService {
 

@@ -6,8 +6,10 @@ import com.crudapi.crud.dto.client.UpdateClientDTO;
 import com.crudapi.crud.mapper.entityMapper.ClientMapper;
 import com.crudapi.crud.model.Client;
 import com.crudapi.crud.repository.ClientRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class ClientService {
     private final ClientRepository clientRepository;

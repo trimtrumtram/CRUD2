@@ -12,18 +12,24 @@ import com.crudapi.crud.model.Product;
 import com.crudapi.crud.repository.OrderRepository;
 import com.crudapi.crud.repository.ProductRepository;
 import com.crudapi.crud.specification.ProductSpecification;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class ProductService {
 
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
     private final OrderRepository orderRepository;
+
+    private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
 
     public ProductService(ProductRepository productRepository, ProductMapper productMapper, OrderRepository orderRepository) {
         this.productRepository = productRepository;
@@ -32,11 +38,15 @@ public class ProductService {
     }
 
     public ProductResponseDTO addProductToOrder(Long orderId, long productId) {
+        logger.info("Поиск продукта по id");
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
+        logger.info("поиск заказа по id");
         Order order = orderRepository.findById(orderId)
                         .orElseThrow(() -> new RuntimeException("Order not found"));
+        logger.info("добавление продукта в заказ");
         order.getProducts().add(product);
+        logger.info("сохранение заказа");
         orderRepository.save(order);
         return productMapper.mapToDTO(productRepository.save(product));
     }

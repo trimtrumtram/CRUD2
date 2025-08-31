@@ -10,12 +10,14 @@ import com.crudapi.crud.dto.employee.EmployeeResponseDTO;
 import com.crudapi.crud.dto.employee.UpdateEmployeeDTO;
 import com.crudapi.crud.model.Employee;
 import com.crudapi.crud.repository.EmployeeRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class EmployeeService {
 
