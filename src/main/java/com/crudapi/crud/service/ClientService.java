@@ -7,6 +7,8 @@ import com.crudapi.crud.mapper.entityMapper.ClientMapper;
 import com.crudapi.crud.model.Client;
 import com.crudapi.crud.repository.ClientRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 public class ClientService {
     private final ClientRepository clientRepository;
     private final ClientMapper clientMapper;
+    private static final Logger logger = LoggerFactory.getLogger(ClientService.class);
 
     public ClientService(ClientRepository clientRepository, ClientMapper clientMapper) {
         this.clientRepository = clientRepository;
@@ -21,6 +24,7 @@ public class ClientService {
     }
 
     public ClientResponseDTO createClient(CreateClientDTO dto) {
+        log.info("Проверка почты и номера телефона");//TODO входной объект
         if(clientRepository.existsByEmail(dto.getEmail())) {
             throw new IllegalArgumentException ("Client with email " + dto.getEmail() + " already exist");
         } else if (clientRepository.existsByPhone(dto.getPhone())) {
@@ -28,6 +32,7 @@ public class ClientService {
         }
 
         Client client = clientMapper.mapToEntity(dto);
+        log.info("Сохранение клиента");
         return clientMapper.mapToDTO(clientRepository.save(client));
     }
 

@@ -92,7 +92,7 @@ public class ProductController {
             @RequestParam(required = false) BigDecimal endPriceFilter,
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
-            @RequestParam(defaultValue = "id") ProductSortField sortBy,
+            @RequestParam(defaultValue = "ID") ProductSortField sortBy,
             @RequestParam(defaultValue = "ASC") SortDirection sortDirection
     ) {
         ProductFilterDTO filter = productFilterMapper.toDTO(

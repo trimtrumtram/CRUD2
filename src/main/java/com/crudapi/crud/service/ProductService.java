@@ -38,15 +38,15 @@ public class ProductService {
     }
 
     public ProductResponseDTO addProductToOrder(Long orderId, long productId) {
-        logger.info("Поиск продукта по id");
+        log.info("Поиск продукта по id" + productId);
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
-        logger.info("поиск заказа по id");
+        log.info("поиск заказа по id" + orderId);
         Order order = orderRepository.findById(orderId)
                         .orElseThrow(() -> new RuntimeException("Order not found"));
-        logger.info("добавление продукта в заказ");
+        log.info("добавление продукта в заказ" + orderId);
         order.getProducts().add(product);
-        logger.info("сохранение заказа");
+        log.info("сохранение заказа {}", orderId);
         orderRepository.save(order);
         return productMapper.mapToDTO(productRepository.save(product));
     }
