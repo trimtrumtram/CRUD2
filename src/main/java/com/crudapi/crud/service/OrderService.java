@@ -31,32 +31,67 @@ public class OrderService {
         this.orderMapper = orderMapper;
     }
 
-    public OrderResponseDTO createOrder (CreateOrderDTO dto) {
+    public OrderResponseDTO createOrder(CreateOrderDTO dto) {
+        log.info("Создание заказа");
+        log.debug("Детали входного DTO: {}", dto);
+
         Order order = orderMapper.mapToEntity(dto);
         order.setCreationDateTime(LocalDateTime.now());
+        log.debug("Entity после маппинга: {}", order);
 
-        return orderMapper.mapToDTO(orderRepository.save(order));
+        Order savedOrder = orderRepository.save(order);
+        log.info("Заказ создан с id={}", savedOrder.getId());
+
+        return orderMapper.mapToDTO(savedOrder);
     }
 
-    public OrderResponseDTO updateOrder (Long id, UpdateOrderDTO dto) {
+    public OrderResponseDTO updateOrder(Long id, UpdateOrderDTO dto) {
+        log.info("Обновление заказа id={}", id);
+        log.debug("Детали UpdateOrderDTO: {}", dto);
+
         Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() -> {
+                    log.error("Заказ не найден: id={}", id);
+                    return new RuntimeException("Order not found");
+                });
+
         order.setStatus(dto.getStatus());
-        return orderMapper.mapToDTO(orderRepository.save(order));
+        log.debug("Новый статус заказа: {}", dto.getStatus());
+
+        Order updatedOrder = orderRepository.save(order);
+        log.info("Заказ id={} успешно обновлён", updatedOrder.getId());
+
+        return orderMapper.mapToDTO(updatedOrder);
     }
 
     public void deleteOrder(Long id) {
+        log.info("Удаление заказа id={}", id);
+
+        if (!orderRepository.existsById(id)) {
+            log.error("Попытка удалить несуществующий заказ id={}", id);
+            throw new RuntimeException("Order not found");
+        }
+
         orderRepository.deleteById(id);
+        log.info("Заказ id={} успешно удалён", id);
     }
 
     public OrderResponseDTO getOrder(Long id) {
+        log.info("Получение заказа по id={}", id);
+
         return orderRepository.findById(id)
-                .map(orderMapper::mapToDTO)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .map(order -> {
+                    log.debug("Найден заказ: {}", order);
+                    return orderMapper.mapToDTO(order);
+                })
+                .orElseThrow(() -> {
+                    log.error("Заказ с id={} не найден", id);
+                    return new RuntimeException("Order not found");
+                });
     }
 
     public Page<OrderResponseDTO> getOrders(OrderFilterDTO filter) {
-
+        log.info("Получение списка заказов с фильтром: {}", filter);
         try {
             OrderSortField sortField = filter.getSortField() != null ? filter.getSortField() : OrderSortField.CREATION_DATE_TIME;
             Sort sort = Sort.by(sortField.getSortBy());
@@ -66,7 +101,9 @@ public class OrderService {
             int size = filter.getSize() != null ? filter.getSize() : 10;
             Pageable pageable = PageRequest.of(page, size, sort);
 
-            return orderRepository.findAll(
+            log.debug("Параметры пагинации: page={}, size={}, sort={}", page, size, sort);
+
+            Page<OrderResponseDTO> result = orderRepository.findAll(
                     OrderSpecification.filterOrder(
                             filter.getStartDate(),
                             filter.getEndDate(),
@@ -74,8 +111,12 @@ public class OrderService {
                     ),
                     pageable
             ).map(orderMapper::mapToDTO);
-        }catch (Exception e) {
-            throw new IllegalArgumentException("Invalid filter " + e.getMessage());
+
+            log.info("Найдено заказов: {}", result.getTotalElements());
+            return result;
+        } catch (Exception e) {
+            log.error("Ошибка при получении заказов с фильтром {}: {}", filter, e.getMessage(), e);
+            throw new IllegalArgumentException("Invalid filter: " + e.getMessage());
         }
     }
 }

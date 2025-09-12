@@ -24,35 +24,59 @@ public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
 
-
     public EmployeeService(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper) {
         this.employeeRepository = employeeRepository;
         this.employeeMapper = employeeMapper;
     }
 
     public EmployeeResponseDTO createEmployee(CreateEmployeeDTO dto) {
-        if(employeeRepository.existsEmployeeByEmail(dto.getEmail())) {
+        log.info("Создание сотрудника: email={}", dto.getEmail());
+        log.debug("Детали входного DTO: {}", dto);
+
+        if (employeeRepository.existsEmployeeByEmail(dto.getEmail())) {
+            log.error("Попытка создать сотрудника с уже существующим email: {}", dto.getEmail());
             throw new IllegalArgumentException("Email already exists");
         }
+
         Employee employee = employeeMapper.mapToEntity(dto);
+        log.debug("Entity после маппинга: {}", employee);
+
         Employee savedEmployee = employeeRepository.save(employee);
+        log.info("Сотрудник сохранён с id={}", savedEmployee.getId());
 
         return employeeMapper.mapToDTO(savedEmployee);
     }
 
     public EmployeeResponseDTO updateEmployee(Long id, UpdateEmployeeDTO dto) {
+        log.info("Обновление сотрудника с id={}", id);
+        log.debug("Детали UpdateEmployeeDTO: {}", dto);
+
         Employee employee = findEmployee(id, dto);
+        log.debug("Найден сотрудник: {}", employee);
+
         validateEmail(employee, dto.getEmail());
         employeeMapper.updateEntityFromDTO(dto, employee);
+
         Employee updatedEmployee = employeeRepository.save(employee);
+        log.info("Сотрудник обновлён: id={}", updatedEmployee.getId());
+
         return employeeMapper.mapToDTO(updatedEmployee);
     }
 
     public void deleteEmployee(Long id) {
+        log.info("Удаление сотрудника с id={}", id);
+
+        if (!employeeRepository.existsById(id)) {
+            log.error("Попытка удалить несуществующего сотрудника: id={}", id);
+            throw new IllegalArgumentException("Employee with id " + id + " not found");
+        }
+
         employeeRepository.deleteById(id);
+        log.info("Сотрудник с id={} успешно удалён", id);
     }
 
-    public Page<EmployeeResponseDTO> getAllEmployees (EmployeeFilterDTO filter) {
+    public Page<EmployeeResponseDTO> getAllEmployees(EmployeeFilterDTO filter) {
+        log.info("Получение списка сотрудников с фильтром: {}", filter);
         try {
             EmployeeSortField sortField = filter.getSortField() != null ? filter.getSortField() : EmployeeSortField.ID;
             Sort sort = Sort.by(sortField.getSortBy());
@@ -62,35 +86,54 @@ public class EmployeeService {
             int size = filter.getSize() != null ? filter.getSize() : 10;
             Pageable pageable = PageRequest.of(page, size, sort);
 
-            return employeeRepository.findAll(
+            log.debug("Параметры пагинации: page={}, size={}, sort={}", page, size, sort);
+
+            Page<EmployeeResponseDTO> result = employeeRepository.findAll(
                     EmployeeSpecification.filterEmployee(
                             filter.getFirstName(),
                             filter.getLastName(),
-                            String.valueOf(filter.getRole()),
+                            filter.getRole() != null ? String.valueOf(filter.getRole()) : null,
                             filter.getEmail()
                     ),
                     pageable
             ).map(employeeMapper::mapToDTO);
+
+            log.info("Найдено сотрудников: {}", result.getTotalElements());
+            return result;
         } catch (Exception e) {
-            throw new IllegalArgumentException("Invalid filter" + e.getMessage());
+            log.error("Ошибка при получении сотрудников с фильтром {}: {}", filter, e.getMessage(), e);
+            throw new IllegalArgumentException("Invalid filter: " + e.getMessage());
         }
     }
 
     private Employee findEmployee(Long id, UpdateEmployeeDTO dto) {
-        if(id != null) {
+        log.debug("Поиск сотрудника по id={} или email={}", id, dto.getEmail());
+
+        if (id != null) {
             return employeeRepository.findById(id)
-                    .orElseThrow(() -> new IllegalArgumentException("Employee with id " + id + " not found"));
+                    .orElseThrow(() -> {
+                        log.error("Сотрудник с id={} не найден", id);
+                        return new IllegalArgumentException("Employee with id " + id + " not found");
+                    });
         }
-        if(dto.getEmail() != null) {
+        if (dto.getEmail() != null) {
             return employeeRepository.findEmployeeByEmail(dto.getEmail())
-                    .orElseThrow(() -> new IllegalArgumentException("Employee with email " + dto.getEmail() + " not found"));
+                    .orElseThrow(() -> {
+                        log.error("Сотрудник с email={} не найден", dto.getEmail());
+                        return new IllegalArgumentException("Employee with email " + dto.getEmail() + " not found");
+                    });
         }
-        else throw new IllegalArgumentException("Email or id is required");
+
+        log.error("Ошибка: email или id должны быть указаны для поиска сотрудника");
+        throw new IllegalArgumentException("Email or id is required");
     }
 
     private void validateEmail(Employee employee, String newEmail) {
-        if(newEmail != null && !newEmail.isBlank() && !newEmail.equals(employee.getEmail())) {
-            if(employeeRepository.existsEmployeeByEmail(newEmail)) {
+        if (newEmail != null && !newEmail.isBlank() && !newEmail.equals(employee.getEmail())) {
+            log.info("Проверка уникальности email: {}", newEmail);
+
+            if (employeeRepository.existsEmployeeByEmail(newEmail)) {
+                log.error("Email {} уже существует", newEmail);
                 throw new IllegalArgumentException("Employee with email " + newEmail + " already exists");
             }
         }
